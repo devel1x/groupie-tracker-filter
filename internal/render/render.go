@@ -3,8 +3,8 @@ package render
 import (
 	"bytes"
 	"fmt"
-	"groupie/pkg/config"
-	"groupie/pkg/models"
+	"groupie/internal/config"
+	"groupie/internal/models"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -14,7 +14,7 @@ import (
 var (
 	funcstions = template.FuncMap{}
 	app        *config.AppConfig
-	err error
+	err        error
 )
 
 // NewTemplate sets the config for render
@@ -31,7 +31,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData)
 		tc = app.TemplateCache
 	} else {
 		tc, err = CreateTemplateCache() // error needs to be handled
-		if err!=nil{
+		if err != nil {
 			log.Fatal("coult not create cache")
 		}
 	}

@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"groupie/pkg/models"
-	"groupie/pkg/render"
+	"groupie/internal/models"
+	"groupie/internal/render"
 	"net/http"
 )
 
@@ -12,7 +12,7 @@ type errs struct {
 }
 
 var (
-	errors = map[int]errs{
+	Errors = map[int]errs{
 		404: {
 			http.StatusNotFound,
 			http.StatusText(http.StatusNotFound),

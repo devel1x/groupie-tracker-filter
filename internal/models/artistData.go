@@ -21,3 +21,4 @@ type Location struct {
 	ID       int      `json:"id"`
 	Location []string `json:"locations"`
 }
+

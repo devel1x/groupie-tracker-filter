@@ -1,16 +1,13 @@
 {{template "base" .}}
 
 {{define "css"}}
-<link rel="stylesheet" type="text/css" href="static/css/index.css">
-<link href="nouislider.css" rel="stylesheet">
-<script src="nouislider.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/css/index.css">
 {{end}}
 
 {{define "content"}}
 <div class="header">
     <h1 class="rock-title">Groupie Tracker</h1>
 </div>
-<div id="slider"></div>
 <div class="block">
      {{range index .Data "Artists"}}
     <a href="/artist?id={{.ID}}">

@@ -1,18 +1,14 @@
-package handlers
+package models
 
-import (
-	"groupie/internal/models"
-	"groupie/internal/render"
-	"net/http"
-)
+import "net/http"
 
-type errs struct {
+type Errs struct {
 	Code int
 	Msg  string
 }
 
 var (
-	Errors = map[int]errs{
+	Errors = map[int]Errs{
 		404: {
 			http.StatusNotFound,
 			http.StatusText(http.StatusNotFound),
@@ -31,13 +27,3 @@ var (
 		},
 	}
 )
-
-func ErrorHandler(w http.ResponseWriter, r *http.Request, myErr errs) {
-	w.WriteHeader(myErr.Code)
-
-	render.RenderTemplate(w, "error.page.html", &models.TemplateData{
-		Error:   myErr.Code,
-		Warning: myErr.Msg,
-	})
-
-}

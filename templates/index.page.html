@@ -1,0 +1,38 @@
+{{template "base" .}}
+
+{{define "css"}}
+<link rel="stylesheet" type="text/css" href="static/css/index.css">
+<link href="nouislider.css" rel="stylesheet">
+<script src="nouislider.js"></script>
+{{end}}
+
+{{define "content"}}
+<div class="header">
+    <h1 class="rock-title">Groupie Tracker</h1>
+</div>
+<div id="slider"></div>
+<div class="block">
+     {{range index .Data "Artists"}}
+    <a href="/artist?id={{.ID}}">
+    <ul class="artist-item">
+            <li class="artist-info">
+                <img class="artist-image" src="{{ .Image }}" alt="">
+                <p class="artist-name">{{.Name}}</p>
+                <p class="artist-creation-date">{{.CreationDate}}</p>
+            </li>
+     
+        </ul>
+    </a>
+    {{end}}
+</div>
+    <div class="loader"></div>
+{{end}}
+
+{{define "js"}}
+<script>
+    window.addEventListener("load", ()=>{
+        const loader = document.querySelector(".loader");
+        loader.classList.add("loader-hidden");
+    })
+</script>
+{{end}}

@@ -1,0 +1,85 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Rock Salt', sans-serif;
+    margin-top: 0;
+    padding: 0;
+    background-color: #000;
+    color: #ffcc00;
+}
+
+.err {
+    font-size: 40px;
+    text-align: center;
+}
+.txt {
+    font-size: 30px;
+    text-align: center;
+}
+
+.container {
+    align-content: center;
+    margin-top: 30vh;
+}
+
+.button {
+    align-content: center;
+    text-align: center;
+    font-family: 'Rock Salt', sans-serif;
+    font-size: 15px;
+    margin-top: 50px;
+    background-color: #ffcc00;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    padding: 25px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border:none;
+    border-radius:50%;
+}
+.button:hover {
+    background-color: #000;
+    color: #ffcc00;
+    transform: scale(1.05);
+}
+.a {
+    align-items: center;
+    text-align: center;
+}
+.dbut {
+    align-items: center;
+    text-align: center;
+}
+
+@media screen and (max-height: 600px) {
+    .container {
+        margin-top: 30vh;
+    }
+    .err {
+        font-size: 20px;
+        text-align: center;
+    }
+    .txt {
+        font-size: 10px;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 460px) {
+    .container {
+        margin-top: 30vh;
+    }
+    .err {
+        font-size: 20px;
+        text-align: center;
+    }
+    .txt {
+        font-size: 10px;
+        text-align: center;
+    }
+}

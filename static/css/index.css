@@ -1,0 +1,139 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Rock Salt', sans-serif;
+    margin-top: 0;
+    padding: 0;
+    background-color: #000;
+    color: #fff;
+}
+
+/* Remove underlines from links */
+a {
+    text-decoration: none;
+    color: #ffcc00; /* Set link color */
+}
+
+h1.rock-title {
+    color: #ffcc00;
+    text-align: center;
+    font-size: 80px;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    padding-left: 15px;
+    margin: 30px 30px;
+}
+
+/* Reset default list styles */
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    transition: opacity 0.75s, visibility 0.75s;
+}
+
+.loader-hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader::after {
+    content: "";
+    width: 75px;
+    height: 75px;
+    border: 15px solid lightyellow;
+    border-top-color: #ffcc00;
+    border-radius: 50%;
+    animation: loading 0.75s ease infinite;
+}
+
+@keyframes loading {
+    from {
+        transform: rotate(0turn);
+    }
+
+    to {
+        transform: rotate(1turn);
+    }
+}
+
+/* Style for each artist item */
+div.block {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+ul.artist-item {
+    list-style: none;
+    padding: 10px;
+}
+
+/* Style for artist information container */
+li.artist-info {
+    text-align: center;
+    padding: 15px;
+    border-radius: 6px;
+    margin: 10px;
+    cursor: pointer;
+    transition: all ease 0.4s;
+}
+
+/* Hover effect */
+.artist-item:hover .artist-info {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Style for artist name */
+p.artist-name {
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: auto;
+    margin-bottom: 0;
+}
+
+/* Style for artist creation date */
+p.artist-creation-date {
+    color: #ffffff;
+    font-size: 16px;
+    margin-top: 0;
+}
+
+/* Style for artist image */
+img.artist-image {
+    max-width: 250px;
+    max-height: 250px;
+    width: 100%;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    filter: grayscale(1);
+    transition: filter 0.5s;
+}
+
+.artist-item:hover img.artist-image {
+    filter: grayscale(0);
+}
+
+@media screen and (max-width: 619px) {
+    h1.rock-title {
+        font-size: 50px;
+    }
+}
+
+@media screen and (max-width: 929px) {
+    h1.rock-title {
+        margin:0;
+        padding:0;
+    }
+}

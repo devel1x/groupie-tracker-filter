@@ -1,0 +1,250 @@
+/* Reset default styles */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height:100vh;
+}
+
+body {
+    font-family: 'Rock Salt', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+    color: #fff;
+    height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    height: 100vh;
+}
+
+.dates {
+    display: inline-table;
+
+    vertical-align: middle; /* Align the date information to the top */
+}
+
+.photodates {
+    width: 100%;
+    display: flex;
+    justify-content: space-between; /* Add space between the image and date information */
+    align-items: center; /* Align vertically centered */
+}
+
+.concert-info {
+    display: flex;
+    flex-direction: column;
+}
+
+h2 {
+    color: #ffcc00;
+}
+
+h3 {
+    font-size: 21px;
+}
+
+.artist-creation-date {
+    margin-bottom: 30px;
+}
+
+.artist-name {
+    color: #ffcc00;
+    font-size: 36px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.memcon {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 10%;
+}
+
+.cdates {
+    list-style:disc;
+    font-size: small;
+}
+
+.artist-page {
+    list-style:none;
+}
+
+.artist-item {
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+
+.members ul {
+    list-style: none;
+    font-size: larger;
+}
+
+.firstAlbum {
+    margin-top: 20px;
+}
+
+img.artist-image {
+    max-width: 100%;
+    border-radius: 50%;
+}
+
+
+/* Additional styles for improved readability */
+
+h1, h2, h3 {
+    margin-bottom: 10px;
+}
+
+.concert-info {
+    margin-bottom: 20px;
+}
+
+/* Add more styles as needed for your specific content */
+/* Your existing CSS styles */
+
+.cdates {
+    list-style: none;
+    display: none;
+}
+
+.city {
+    margin-bottom: 15px;
+}
+
+.toggle-dates {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    font-size: larger;
+}
+
+.toggle-icon {
+    margin-left: 10px;
+    color: #ffcc00;
+}
+
+.cdates.active {
+    display: block;
+}
+
+
+.button {
+    align-content: center;
+    text-align: center;
+    font-family: 'Rock Salt', sans-serif;
+    font-size: 15px;
+    margin-top: 50px;
+    background-color: #ffcc00;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    padding: 25px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border:none;
+    border-radius:50%;
+}
+.button:hover {
+    background-color: #000;
+    color: #ffcc00;
+    transform: scale(1.05);
+}
+.a {
+    align-items: center;
+    text-align: center;
+}
+.dbut {
+    align-items: center;
+    text-align: center;
+}
+
+/* Additional styles for improved readability */
+
+
+@media screen and (max-width: 750px) {
+    h1 {
+        font-size: 20px;
+    }
+    h2 {
+        font-size: 15px;
+    }
+    .city {
+        font-size: 12px;
+    }
+    .cdates {
+        font-size: 10px;
+    }
+    .members {
+        font-size: 12px;
+    }
+    .button {
+        margin-top: 20px;
+        font-size: 10px;
+        margin-bottom: 20px;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    h1 {
+        font-size: 20px;
+    }
+    h2 {
+        font-size: 15px;
+    }
+    .city {
+        font-size: 12px;
+    }
+    .cdates {
+        font-size: 10px;
+    }
+    .members {
+        font-size: 12px;
+        margin-bottom: 20px;
+    }
+    .photodates {
+        display: inline-block;
+    }
+    .memcon {
+        display: inline-block;
+    }
+    .container {
+        text-align: center;
+        align-items: center;
+    }
+    .city {
+        text-align: left;
+        align-items: left;
+    }
+    .toggle-dates {
+        text-align: left;
+        align-items: left;
+        list-style: none;
+    }
+    .city-list{
+        text-align: left;
+        align-items: left;
+        list-style: none;
+    }
+    .concert-info{
+        text-align: left;
+        align-items: left;
+        list-style: none;
+    }
+    .toggle-icon {
+        position:static;
+        text-align: right;
+        align-items: right;
+    }
+}

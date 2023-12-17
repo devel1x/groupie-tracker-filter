@@ -1,0 +1,15 @@
+{{template "base" .}}
+
+{{define "css"}}
+<link rel="stylesheet" type="text/css" href="./static/css/error.css">
+
+<link rel="stylesheet" type="text/css" href="./css/error.css">
+{{end}}
+
+{{define "content"}}
+    <div class="container">
+    <div class="err"><h1>Error {{.Error}}</h1></div>
+    <div class="txt"><h1> {{.Warning}} </h1></div>
+    </div>
+    <div class="dbut"><a href="/"><button type="submit" name="back" class="button">Back</button></a></div>
+{{end}}

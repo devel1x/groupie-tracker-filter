@@ -1,0 +1,57 @@
+{{template "base" .}}
+
+{{define "css"}}
+<link rel="stylesheet" type="text/css" href="static/css/artist.css">
+{{end}}
+
+{{define "content"}}
+    {{$a := index .Data "Artist"}}
+    <div class="container">
+        <h1 class="artist-name">{{$a.Name}}</h1>
+        <ul class="artist-page">
+            <li class="artist-item">
+                <div class="photodates">
+                    <div><img class="artist-image" src="{{ $a.Image }}" alt=""></div>
+                    <div class="dates">
+                        <h2>Creation Date:</h2>
+                        <p class="artist-creation-date">{{$a.CreationDate}}</p>
+                        <h2>First Album:</h2>
+                        <p class="firstAlbum">{{$a.FirstAlbum}}</p>
+                    </div>
+                </div>
+                <div class="memcon">
+                    <div class="members">
+                        <h2>Members:</h2>
+                        <ul>
+                            {{range $a.Members}}
+                                <li>{{.}}</li>
+                            {{end}}
+                        </ul>
+                    </div>
+                    <div class="concerts">
+                        <h2>Concerts:</h2>
+                        <ul class="city-list">
+                            {{range $a.Location.Location}}
+                                <li class="city">
+                                    <div class="toggle-dates" onclick="toggleConcertDates(this)">
+                                        {{.}} <span class="toggle-icon">+</span>
+                                    </div>
+                                    <ul class="cdates">
+                                        {{$b := index $a.Relation.DatesLocations .}}
+                                        {{range $b}}
+                                            <li>{{.}}</li>
+                                        {{end}}
+                                    </ul>
+                                </li>
+                            {{end}}
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="dbut"><a href="/"><button type="submit" name="back" class="button">Back</button></a></div>
+    </div>
+
+    <script src="static/js/artist.js"></script>
+{{end}}
+

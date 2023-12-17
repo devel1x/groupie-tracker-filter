@@ -25,13 +25,12 @@ func main() {
 		return
 	}
 	app.TemplateCache = tc
-	app.UseCache = true
 	render.NewTemplate(&app)
 
 	r := repo.New(urlArtist, urlRelation, urlLocation)
 	s := service.New(r)
 	h := handlers.New(s)
-
+	h.Cash()
 	mux := http.NewServeMux()
 
 	mux.Handle("/static/", h.Handler)

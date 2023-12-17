@@ -29,6 +29,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData)
 
 	if app.UseCache {
 		tc = app.TemplateCache
+		fmt.Print("USED CASH")
 	} else {
 		tc, err = CreateTemplateCache() // error needs to be handled
 		if err != nil {

@@ -7,6 +7,7 @@ import (
 )
 
 func (s *service) Artists() ([]models.Artist, error) {
+	fmt.Print("Got all artists")
 	return s.RepoI.Artists()
 }
 

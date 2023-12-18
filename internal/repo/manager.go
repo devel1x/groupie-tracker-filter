@@ -10,7 +10,7 @@ type RepoI interface {
 }
 
 type repo struct {
-	urlsArtists string
+	urlArtists string
 	urlRelation string
 	urlLocation string
 }

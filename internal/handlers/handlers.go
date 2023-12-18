@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"groupie/internal/models"
 	"groupie/internal/render"
+	"groupie/internal/service"
 	"net/http"
 	"strings"
 	"time"
 )
 
-var t models.TemplateData
-
+var (
+	t models.TemplateData
+)
 var StaticHandler = http.StripPrefix("/static/", preventDirListing(http.FileServer(http.Dir("./web/static"))))
 
 func (h *handler) Cash() *handler {
@@ -44,31 +46,56 @@ func (h *handler) IndexHandler(w http.ResponseWriter, r *http.Request) {
 		})
 	} else {
 		h.useCash = true
-
 		if r.URL.Path != "/" {
 			ErrorHandler(w, r, models.Errors[404])
 			return
 		}
-		if r.Method != "GET" {
-			ErrorHandler(w, r, models.Errors[405])
-			return
-		}
-
-		Artists, err := h.ServiceI.Artists()
+		switch r.Method{
+		case "GET":
+			Artists, err := h.ServiceI.Artists()
 		// fmt.Print(Artists)
 		if err != nil {
 			ErrorHandler(w, r, models.Errors[500])
 			return
 		}
+			t = models.TemplateData{
+				Data: make(map[string]interface{}),
+			}
+	
+			t.Data["Artists"] = Artists
+	
+			render.RenderTemplate(w, "index.page.html", &t)
+		
+		case "POST":
+			cDateF := r.URL.Query().Get("cDateF")
+			cDateT := r.URL.Query().Get("cDateT")
+			loc := r.URL.Query().Get("loc")
+			members := r.URL.Query().Get("members")
+			aDateF := r.URL.Query().Get("aDateF")
+			aDateT := r.URL.Query().Get("aDateT")
+			Artists, err := h.ServiceI.Artists()
+			f:=service.NewFilter(Artists, aDateF,aDateT,cDateF,cDateT,members,loc)
+			Artists,err=f.Filter()
+			// fmt.Print(Artists)
+			if err != nil {
+				ErrorHandler(w, r, models.Errors[500])
+				return
+			}
 
-		t = models.TemplateData{
-			Data: make(map[string]interface{}),
+
+
+				t = models.TemplateData{
+					Data: make(map[string]interface{}),
+				}
+		
+				t.Data["Artists"] = Artists
+		
+				render.RenderTemplate(w, "index.page.html", &t)
+		default:
+			ErrorHandler(w, r, models.Errors[405])
+			return
 		}
-
-		t.Data["Artists"] = Artists
-
-		render.RenderTemplate(w, "index.page.html", &t)
-	}
+}
 }
 
 func preventDirListing(handler http.Handler) http.HandlerFunc {
@@ -82,14 +109,7 @@ func preventDirListing(handler http.Handler) http.HandlerFunc {
 }
 
 func (h *handler) ArtistHandler(w http.ResponseWriter, r *http.Request) {
-	// if h.useCash {
-	// 	fmt.Print("USED CASH")
-	// 	artistID := r.URL.Query().Get("id")
-	// 	render.RenderTemplate(w, "index.page.html", &models.TemplateData{
-	// 		Data: t.Data[artistID],
-	// 	})
-	// } else {
-	// 	h.useCash = true
+
 	if r.URL.Path != "/artist" {
 		ErrorHandler(w, r, models.Errors[404])
 		return
@@ -117,8 +137,6 @@ func (h *handler) ArtistHandler(w http.ResponseWriter, r *http.Request) {
 		Data: Data,
 	})
 }
-
-//}
 
 func ErrorHandler(w http.ResponseWriter, r *http.Request, myErr models.Errs) {
 	w.WriteHeader(myErr.Code)

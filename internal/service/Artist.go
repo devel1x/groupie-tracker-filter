@@ -8,7 +8,18 @@ import (
 
 func (s *service) Artists() ([]models.Artist, error) {
 	fmt.Print("Got all artists")
-	return s.RepoI.Artists()
+	artist, err := s.RepoI.Artists()
+	if err != nil {
+
+	}
+	loc, err := s.RepoI.AllLoc()
+	if err != nil {
+
+	}
+	for key, _ := range artist {
+		artist[key].Location = &loc[key]
+	}
+	return artist, nil
 }
 
 func (s *service) Artist(id string) (*models.Artist, error) {

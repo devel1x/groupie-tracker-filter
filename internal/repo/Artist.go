@@ -58,6 +58,22 @@ func (r *repo) Loc(id string) (*models.Location, error) {
 	return &location, nil
 }
 
+func (r *repo) AllLoc() ([]models.Location, error) {
+
+	var location []models.LocationResponse
+
+	err := r.GetJson(r.urlLocation, &location)
+	if err != nil {
+		fmt.Print(err)
+		return nil, err
+	}
+	var allLocations []models.Location
+	for _, locationResponse := range location {
+		allLocations = append(allLocations, locationResponse.Index...)
+	}
+	return allLocations, nil
+}
+
 func (r *repo) Rel(id string) (*models.Relation, error) {
 	url := r.urlRelation + "/" + id
 	var relation models.Relation

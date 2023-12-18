@@ -18,7 +18,7 @@ var StaticHandler = http.StripPrefix("/static/", preventDirListing(http.FileServ
 func (h *handler) Cash() *handler {
 	if h.useCashTimer == nil {
 		// Set useCashTimer to a new timer that triggers every 20 minutes
-		h.useCashTimer = time.NewTimer(20 * time.Minute)
+		h.useCashTimer = time.NewTimer(1 * time.Second)
 
 		// Start a goroutine to handle the timer expiration
 		go func() {
@@ -29,7 +29,7 @@ func (h *handler) Cash() *handler {
 					h.useCash = false
 
 					// Reset the timer for the next 20 minutes
-					h.useCashTimer.Reset(20 * time.Minute)
+					h.useCashTimer.Reset(1 * time.Second)
 				}
 			}
 		}()
@@ -50,22 +50,29 @@ func (h *handler) IndexHandler(w http.ResponseWriter, r *http.Request) {
 			ErrorHandler(w, r, models.Errors[404])
 			return
 		}
-		switch r.Method{
+		switch r.Method {
 		case "GET":
 			Artists, err := h.ServiceI.Artists()
-		// fmt.Print(Artists)
-		if err != nil {
-			ErrorHandler(w, r, models.Errors[500])
-			return
-		}
+	
+			// fmt.Print(Artists)
+			if err != nil {
+				ErrorHandler(w, r, models.Errors[500])
+				return
+			}
+			loc := service.GetLocF(Artists)
+			for key, value := range loc {
+				fmt.Println(key)
+				fmt.Println(value)
+				fmt.Println()
+			}
 			t = models.TemplateData{
 				Data: make(map[string]interface{}),
 			}
-	
+
 			t.Data["Artists"] = Artists
-	
+
 			render.RenderTemplate(w, "index.page.html", &t)
-		
+
 		case "POST":
 			cDateF := r.URL.Query().Get("cDateF")
 			cDateT := r.URL.Query().Get("cDateT")
@@ -74,28 +81,25 @@ func (h *handler) IndexHandler(w http.ResponseWriter, r *http.Request) {
 			aDateF := r.URL.Query().Get("aDateF")
 			aDateT := r.URL.Query().Get("aDateT")
 			Artists, err := h.ServiceI.Artists()
-			f:=service.NewFilter(Artists, aDateF,aDateT,cDateF,cDateT,members,loc)
-			Artists,err=f.Filter()
-			// fmt.Print(Artists)
+			f := service.NewFilter(Artists, aDateF, aDateT, cDateF, cDateT, members, loc)
+			Artists, err = f.Filter()
+
 			if err != nil {
 				ErrorHandler(w, r, models.Errors[500])
 				return
 			}
+			t = models.TemplateData{
+				Data: make(map[string]interface{}),
+			}
 
+			t.Data["Artists"] = Artists
 
-
-				t = models.TemplateData{
-					Data: make(map[string]interface{}),
-				}
-		
-				t.Data["Artists"] = Artists
-		
-				render.RenderTemplate(w, "index.page.html", &t)
+			render.RenderTemplate(w, "index.page.html", &t)
 		default:
 			ErrorHandler(w, r, models.Errors[405])
 			return
 		}
-}
+	}
 }
 
 func preventDirListing(handler http.Handler) http.HandlerFunc {

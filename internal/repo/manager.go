@@ -7,6 +7,7 @@ type RepoI interface {
 	Artist(string) (*models.Artist, error)
 	Rel(n string) (*models.Relation, error)
 	Loc(n string) (*models.Location, error)
+	AllLoc()([]models.Location,error)
 }
 
 type repo struct {

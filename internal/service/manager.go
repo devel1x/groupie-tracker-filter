@@ -54,3 +54,8 @@ func NewFilter(artist []models.Artist, aDateF, aDateT, cDateF, cDateT, members, 
 		loc,
 	}
 }
+
+type LocFilter struct {
+	country string
+	city []string
+}

@@ -3,6 +3,7 @@ package service
 import (
 	"groupie/internal/models"
 	"strconv"
+	"strings"
 )
 
 var err error
@@ -54,7 +55,7 @@ func (f *filter) fCreation() ([]models.Artist, error) {
 }
 
 func (f *filter) fAlbum() ([]models.Artist, error) {
-	// var artist []models.Artist
+	var artist []models.Artist
 
 	// dates := make(map[string]int)
 	// for key, value := range f.aDate {
@@ -68,14 +69,14 @@ func (f *filter) fAlbum() ([]models.Artist, error) {
 	// 		artist = append(artist, f.artist[key])
 	// 	}
 	// }
-	// return artist, nil
+	return artist, nil
 }
 
 func (f *filter) fMembers() ([]models.Artist, error) {
 	var artist []models.Artist
-	
-	n,err:=f.parseInt(f.members)
-	if err!=nil{
+
+	n, err := f.parseInt(f.members)
+	if err != nil {
 		return nil, err
 	}
 
@@ -83,8 +84,8 @@ func (f *filter) fMembers() ([]models.Artist, error) {
 		var count int
 		for range value.Members {
 			count++
-			}
-		if count==n {
+		}
+		if count == n {
 			artist = append(artist, f.artist[key])
 		}
 	}
@@ -95,11 +96,13 @@ func (f *filter) fLocation() ([]models.Artist, error) {
 	var artist []models.Artist
 
 	for key, value := range f.artist {
-		var count int
-		for range value.Location.Location {
-			
+		flag := false
+		for _, value := range value.Location.Location {
+			if value == f.loc {
+				flag = true
 			}
-		if count==n {
+		}
+		if flag {
 			artist = append(artist, f.artist[key])
 		}
 	}
@@ -111,5 +114,36 @@ func (f *filter) parseInt(s string) (int, error) {
 	if err != nil {
 		return 0, err
 	}
+
 	return i, nil
+}
+func GetLocF(artist []models.Artist) map[string][]string {
+	var (
+		loc = make(map[string][]string)
+	)
+	for _, value := range artist {
+		for _, value := range value.Location.Location {
+			a := strings.Split(value, "-")
+			a[0] = strings.Title(strings.Replace(a[0], "_", "-", -1))
+			a[1] = strings.Title(a[1])
+			if _, exists := loc[a[1]]; !exists {
+				loc[a[1]] = []string{}
+				loc[a[1]] = append(loc[a[1]], a[0])
+			} else {
+				if !contains(loc[a[1]], a[0]) {
+					loc[a[1]] = append(loc[a[1]], a[0])
+				}
+			}
+		}
+	}
+	return loc
+}
+
+func contains(arr []string, a string) bool {
+	for _, value := range arr {
+		if value == a {
+			return true
+		}
+	}
+	return false
 }

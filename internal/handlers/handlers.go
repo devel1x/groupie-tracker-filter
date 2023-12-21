@@ -11,9 +11,9 @@ import (
 )
 
 var (
-	t models.TemplateData
+	t             models.TemplateData
+	StaticHandler = http.StripPrefix("/static/", preventDirListing(http.FileServer(http.Dir("./web/static"))))
 )
-var StaticHandler = http.StripPrefix("/static/", preventDirListing(http.FileServer(http.Dir("./web/static"))))
 
 func (h *handler) Cash() *handler {
 	if h.useCashTimer == nil {
@@ -53,36 +53,55 @@ func (h *handler) IndexHandler(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case "GET":
 			Artists, err := h.ServiceI.Artists()
-	
 			// fmt.Print(Artists)
 			if err != nil {
 				ErrorHandler(w, r, models.Errors[500])
 				return
 			}
-			loc := service.GetLocF(Artists)
-			for key, value := range loc {
-				fmt.Println(key)
-				fmt.Println(value)
-				fmt.Println()
-			}
+			Artists, loc := service.GetLocF(Artists)
+			// for key, value := range loc {
+			// 	fmt.Println(key)
+			// 	fmt.Println(value)
+			// 	fmt.Println()
+			// }
 			t = models.TemplateData{
 				Data: make(map[string]interface{}),
 			}
 
-			t.Data["Artists"] = Artists
+			var output output
+			output.Artist = Artists
+			output.CityMap = loc
+
+			t.Data["Artists"] = output
 
 			render.RenderTemplate(w, "index.page.html", &t)
 
 		case "POST":
-			cDateF := r.URL.Query().Get("cDateF")
-			cDateT := r.URL.Query().Get("cDateT")
-			loc := r.URL.Query().Get("loc")
-			members := r.URL.Query().Get("members")
-			aDateF := r.URL.Query().Get("aDateF")
-			aDateT := r.URL.Query().Get("aDateT")
+			if err := r.ParseForm(); err != nil {
+				// Handle error
+				ErrorHandler(w, r, models.Errors[500])
+				return
+			}
+			cDateF := r.FormValue("cDateF")
+			cDateT := r.FormValue("cDateT")
+			locCity := r.FormValue("locCity")
+			locCountry := r.FormValue("locCountry")
+			members := r.FormValue("members")
+			aDate := r.FormValue("aDate")
 			Artists, err := h.ServiceI.Artists()
-			f := service.NewFilter(Artists, aDateF, aDateT, cDateF, cDateT, members, loc)
-			Artists, err = f.Filter()
+			var loc map[string]string
+			if locCountry != "" {
+				loc = map[string]string{
+					locCountry: locCity,
+				}
+			}
+
+			fmt.Println(cDateF)
+			fmt.Println(cDateT)
+			fmt.Println(locCity)
+			fmt.Println(locCountry)
+			fmt.Println(members)
+			fmt.Println(aDate)
 
 			if err != nil {
 				ErrorHandler(w, r, models.Errors[500])
@@ -91,8 +110,14 @@ func (h *handler) IndexHandler(w http.ResponseWriter, r *http.Request) {
 			t = models.TemplateData{
 				Data: make(map[string]interface{}),
 			}
+			Artists, locAr := service.GetLocF(Artists)
+			f := service.NewFilter(Artists, aDate, cDateF, cDateT, members, loc)
+			Artists, err = f.Filter()
 
-			t.Data["Artists"] = Artists
+			var output output
+			output.Artist = Artists
+			output.CityMap = locAr
+			t.Data["Artists"] = output
 
 			render.RenderTemplate(w, "index.page.html", &t)
 		default:
@@ -113,7 +138,6 @@ func preventDirListing(handler http.Handler) http.HandlerFunc {
 }
 
 func (h *handler) ArtistHandler(w http.ResponseWriter, r *http.Request) {
-
 	if r.URL.Path != "/artist" {
 		ErrorHandler(w, r, models.Errors[404])
 		return
@@ -149,5 +173,4 @@ func ErrorHandler(w http.ResponseWriter, r *http.Request, myErr models.Errs) {
 		Error:   myErr.Code,
 		Warning: myErr.Msg,
 	})
-
 }

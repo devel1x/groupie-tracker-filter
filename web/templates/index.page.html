@@ -8,8 +8,57 @@
 <div class="header">
     <h1 class="rock-title">Groupie Tracker</h1>
 </div>
+{{$a := index .Data "Artists"}}
+{{$cityMap :=  $a.CityMap}}
+<!-- Filter Form -->
+<div class="filters">
+    <form method="POST" action="/">
+        <div class="filter-group">
+            <label for="aDate">Album Date:</label>
+            <input type="text" id="aDate" name="aDate" placeholder="YYYY">
+        </div>
+        <div class="filter-group">
+            <label for="cDateF">Creation Date From:</label>
+            <input type="text" id="cDateF" name="cDateF" placeholder="YYYY">
+        </div>
+        <div class="filter-group">
+            <label for="cDateT">Creation Date To:</label>
+            <input type="text" id="cDateT" name="cDateT" placeholder="YYYY">
+        </div>
+        <div class="filter-group">
+            <label for="members">Number of Members:</label>
+            <input type="number" id="members" name="members">
+        </div>
+        <div class="filter-group">
+            <label for="locCountry">Country:</label>
+            <select name="locCountry" id="locCountry" onchange="filterCities()">
+                <option value="" selected>Select a Country</option>
+                {{range $country, $_ := $cityMap}}
+                <option value="{{$country}}">{{$country}}</option>
+                {{end}}
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label for="locCity">City:</label>
+            <select name="locCity" id="locCity" disabled>
+                <option value="">Select a City</option>
+                {{range $country, $cities := $cityMap}}
+                {{range $cities}}
+                <option value="{{.}}" data-country="{{$country}}">{{.}}</option>
+                {{end}}
+                {{end}}
+            </select>
+        </div>
+        </div>
+        
+        <button type="submit">Filter</button>
+    </form>
+</div>
+
 <div class="block">
-     {{range index .Data "Artists"}}
+
+     {{range $a.Artist}}
     <a href="/artist?id={{.ID}}">
     <ul class="artist-item">
             <li class="artist-info">
@@ -17,12 +66,11 @@
                 <p class="artist-name">{{.Name}}</p>
                 <p class="artist-creation-date">{{.CreationDate}}</p>
             </li>
-     
         </ul>
     </a>
     {{end}}
 </div>
-    <div class="loader"></div>
+<div class="loader"></div>
 {{end}}
 
 {{define "js"}}
@@ -31,5 +79,25 @@
         const loader = document.querySelector(".loader");
         loader.classList.add("loader-hidden");
     })
+</script>
+<script>
+    function filterCities() {
+        var country = document.getElementById("locCountry").value;
+        var citySelect = document.getElementById("locCity");
+        var cities = citySelect.getElementsByTagName("option");
+
+        // Disable city dropdown if no country is chosen
+        citySelect.disabled = country === "";
+
+        // Toggle hidden attribute based on the selected country
+        for (var i = 0; i < cities.length; i++) {
+            var city = cities[i];
+            if (city.getAttribute("data-country") === country || country === "") {
+                city.removeAttribute("hidden");
+            } else {
+                city.setAttribute("hidden", "hidden");
+            }
+        }
+    }
 </script>
 {{end}}

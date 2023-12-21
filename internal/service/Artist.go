@@ -10,15 +10,11 @@ func (s *service) Artists() ([]models.Artist, error) {
 	fmt.Print("Got all artists")
 	artist, err := s.RepoI.Artists()
 	if err != nil {
-
 	}
-	loc, err := s.RepoI.AllLoc()
+	artist, err = s.RepoI.AllLoc(artist)
 	if err != nil {
+	}
 
-	}
-	for key, _ := range artist {
-		artist[key].Location = &loc[key]
-	}
 	return artist, nil
 }
 

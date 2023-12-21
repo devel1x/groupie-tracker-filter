@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"groupie/internal/models"
 	"groupie/internal/service"
 	"net/http"
 	"time"
@@ -20,4 +21,9 @@ func New(s service.ServiceI) *handler {
 		false,
 		nil,
 	}
+}
+
+type output struct{
+	Artist []models.Artist
+	CityMap map[string][]string
 }

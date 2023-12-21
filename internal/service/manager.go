@@ -20,28 +20,21 @@ type FilterI interface {
 
 type filter struct {
 	artist  []models.Artist
-	aDate   map[string]string
+	aDate   string
 	cDate   map[string]string
 	members string
-	loc     string
+	loc     map[string]string
 }
 
 func New(r repo.RepoI) ServiceI {
 	return &service{
 		r,
 	}
-
 }
 
-func NewFilter(artist []models.Artist, aDateF, aDateT, cDateF, cDateT, members, loc string) FilterI {
-	var aDate map[string]string
-	if aDateF!="" && aDateT!=""{
-		aDate = make(map[string]string)
-		aDate["from"] = aDateF
-		aDate["to"] = aDateT
-	}
+func NewFilter(artist []models.Artist, aDate, cDateF, cDateT, members string, loc map[string]string) FilterI {
 	var cDate map[string]string
-	if cDateF!="" && cDateT!=""{
+	if cDateF != "" || cDateT != "" {
 		cDate = make(map[string]string)
 		cDate["from"] = cDateF
 		cDate["to"] = cDateT
@@ -53,9 +46,4 @@ func NewFilter(artist []models.Artist, aDateF, aDateT, cDateF, cDateT, members, 
 		members,
 		loc,
 	}
-}
-
-type LocFilter struct {
-	country string
-	city []string
 }

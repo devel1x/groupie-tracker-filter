@@ -20,8 +20,5 @@ type Relation struct {
 type Location struct {
 	ID       int      `json:"id"`
 	Location []string `json:"locations"`
-}
-
-type LocationResponse struct {
-	Index []Location `json:"index"`
+	CityMap  map[string][]string
 }

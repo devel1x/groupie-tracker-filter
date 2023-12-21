@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"groupie/internal/models"
 	"net/http"
+	"strconv"
+	"sync"
 	"time"
 )
 
@@ -30,7 +32,7 @@ func (r *repo) Artists() ([]models.Artist, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	
 	return artists, nil
 }
 
@@ -58,20 +60,32 @@ func (r *repo) Loc(id string) (*models.Location, error) {
 	return &location, nil
 }
 
-func (r *repo) AllLoc() ([]models.Location, error) {
-
-	var location []models.LocationResponse
-
-	err := r.GetJson(r.urlLocation, &location)
-	if err != nil {
-		fmt.Print(err)
-		return nil, err
+// EDIt 
+func (r *repo) AllLoc(allArtists []models.Artist) ([]models.Artist, error) {
+	var wg sync.WaitGroup
+	for i, artist := range allArtists {
+		wg.Add(1)
+		go func(artist models.Artist, i int) {
+			defer wg.Done()
+			loca, _ := r.Loc(strconv.Itoa(artist.ID))
+			allArtists[i].Location = loca
+		}(artist, i)
 	}
-	var allLocations []models.Location
-	for _, locationResponse := range location {
-		allLocations = append(allLocations, locationResponse.Index...)
-	}
-	return allLocations, nil
+	wg.Wait()
+
+	// var location []models.LocationResponse
+
+	// err := r.GetJson(r.urlLocation, &location)
+	// if err != nil {
+	// 	fmt.Print(err)
+	// 	return nil, err
+	// }
+	// var allLocations []models.Location
+	// for _, locationResponse := range location {
+	// 	allLocations = append(allLocations, locationResponse.Index...)
+	// }
+	// return allLocations, nil
+	return allArtists, nil
 }
 
 func (r *repo) Rel(id string) (*models.Relation, error) {
